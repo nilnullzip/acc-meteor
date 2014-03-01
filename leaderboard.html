@@ -1,0 +1,43 @@
+<head>
+  <title>Collect accelerometer samples.</title>
+</head>
+
+<body>
+  <div id="maindiv">
+    Sanity check: <span id="sanity"></span><br>
+    <br>
+    measured sample interval: <span id="measured"></span> ms<br>
+    API indicates sample interval: <span id="interval"></span> sec<br>
+    number of samples saved: <span id="interval">{{> nsamples}}</span><br>
+    <br>
+    {{> buttons}}
+    <br>
+    <br>
+    acc x: <span id="accx"></span><br>
+    acc y: <span id="accy"></span><br>
+    acc z: <span id="accz"></span><br>
+    rot a: <span id="rota"></span><br>
+    rot b: <span id="rotb"></span><br>
+    rot c: <span id="rotc"></span><br>
+    <br>
+    {{> recentsamples}}
+  </div>
+</body>
+
+<template name="nsamples">
+  {{nsamples}}
+</template>
+
+<template name="recentsamples">
+  <div>
+    Samples: <br>
+    {{#each sample}}
+      sample: {{this}}<br>
+    {{/each}}
+  </div>
+</template>
+
+<template name="buttons">
+    <input type="button" id="clear" value="Clear all samples" />
+</template>
+
