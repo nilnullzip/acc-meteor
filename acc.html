@@ -4,6 +4,7 @@
 
 <body>
   <div id="maindiv">
+    Collect accelerometer samples and save to MongoDB<br><br>
     Sanity check: <span id="sanity"></span><br>
     <br>
     measured sample interval: <span id="measured"></span> ms<br>
@@ -30,9 +31,9 @@
 
 <template name="recentsamples">
   <div>
-    Samples: <br>
-    {{#each sample}}
-      sample: {{this}}<br>
+    Last 20 samples:<br>
+    {{#each samples}}
+      {{this}}<br>
     {{/each}}
   </div>
 </template>

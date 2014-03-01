@@ -23,7 +23,7 @@ if (Meteor.isClient) {
     return Samples.find().count();
   };
 
-  Template.recentsamples.sample = function () {
+  Template.recentsamples.samples = function () {
     var s = Samples.findOne({}, {sort: {created_at: -1}});
     if (s != null) {
       return _.map(s["samples"], JSON.stringify );
@@ -73,6 +73,7 @@ if (Meteor.isClient) {
           doc.b = e.rotationRate.beta;
           doc.c = e.rotationRate.gamma;
         }
+        doc.t = t;
         docs.push(doc);
         document.getElementById("sanity").innerHTML = "docs.length: " + docs.length;      
         if (docs.length > 20) {
