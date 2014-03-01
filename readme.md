@@ -1,4 +1,6 @@
 ### Capture accelerometer samples and save to MongoDB
+-----------------------------------------------------
+###### Juan Pineda nilnullzip on GitHub
 
 Based on HTML5 accelerometer interface and Meteor web framework.
 
