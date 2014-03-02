@@ -62,6 +62,8 @@ if (Meteor.isClient) {
     var samples = [];
 
     if (window.DeviceMotionEvent != undefined) {
+
+      // Device motion event service routine!
             
       window.ondevicemotion = function(e) {
 
