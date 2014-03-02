@@ -54,29 +54,26 @@ if (Meteor.isClient) {
     if (window.DeviceMotionEvent != undefined) {
             
       window.ondevicemotion = function(e) {
-        var t = Date.now()
-        e.interval = .020
-        document.getElementById("measured").innerHTML = t - timestamp
-        document.getElementById("interval").innerHTML = e.interval
+        var t = Date.now();
+        $("#measured").html(t - timestamp);
+        $("#interval").html(e.interval);
         timestamp = t
 
-    //    ax = event.accelerationIncludingGravity.x * 5;
-    //    ay = event.accelerationIncludingGravity.y * 5;
         var doc = {}
-        document.getElementById("accx").innerHTML = e.accelerationIncludingGravity.x;
-        document.getElementById("accy").innerHTML = e.accelerationIncludingGravity.y;
-        document.getElementById("accz").innerHTML = e.accelerationIncludingGravity.z;
         doc.x = e.accelerationIncludingGravity.x;
         doc.y = e.accelerationIncludingGravity.y;
         doc.z = e.accelerationIncludingGravity.z;
+        $("#accx").html(doc.x);
+        $("#accy").html(doc.y);
+        $("#accz").html(doc.z);
 
         if ( e.rotationRate ) {
-          document.getElementById("rota").innerHTML = e.rotationRate.alpha;
-          document.getElementById("rotb").innerHTML = e.rotationRate.beta;
-          document.getElementById("rotc").innerHTML = e.rotationRate.gamma;
           doc.a = e.rotationRate.alpha;
           doc.b = e.rotationRate.beta;
           doc.c = e.rotationRate.gamma;
+          $("#rota").html(doc.a);
+          $("#rotb").html(doc.b);
+          $("#rotc").html(doc.c);
         }
         doc.t = t;
         docs.push(doc);

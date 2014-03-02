@@ -23,11 +23,12 @@
 
 <template name="radios">
     <form action="">
-      <input type="radio" name="display" value="live" checked>Live accelerometer data<br>
+      <input type="radio" name="display" value="live" checked>Live accelerometer data (only on mobile)<br>
       <input type="radio" name="display" value="20">Last 20 samples<br>
-      <input type="radio" name="display" value="json">JSON
+      <input type="radio" name="display" value="json">All data in JSON format
     </form>
     <br>
+    
     {{#if radio_value "live"}}
     measured sample interval: <span id="measured"></span> ms<br>
     API indicates sample interval: <span id="interval"></span> sec<br>
