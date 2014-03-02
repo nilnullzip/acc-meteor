@@ -6,22 +6,7 @@ testdata = {samples: [1,2,3]}
 
 if (Meteor.isClient) {
 
-  Handlebars.registerHelper('sessionvar',function(input){
-    console.log("sessionvar: " + input)
-    return Session.get(input);
-  });
-/*
-  Handlebars.registerHelper('radio_selected',function(input){
-    console.log("radio_selected: " + input)
-    if (document.getElementById(input)) {
-      return document.getElementById(input).checked;      
-    } else {
-      return false;
-    }
-  });
-*/
   Template.radios.radio_value = function(input){
-//    console.log("radio_selected: " + JSON.stringify(input))
     return Session.get("radio_value") == input;
   };
 
@@ -36,7 +21,6 @@ if (Meteor.isClient) {
 
   Template.radios.events({
     'click input': function () {
-//      console.log("radio clicked")
       Session.set("radio_value", $("input:radio[name=display]:checked").val())
     }
   });
