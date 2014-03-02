@@ -17,15 +17,6 @@
   {{nsamples}}
 </template>
 
-<template name="recentsamples">
-  <div>
-    Last 20 samples:<br>
-    {{#each samples}}
-      {{this}}<br>
-    {{/each}}
-  </div>
-</template>
-
 <template name="buttons">
     <input type="button" id="clear" value="Delete samples" />
 </template>
@@ -48,10 +39,15 @@
     rot b: <span id="rotb"></span><br>
     rot c: <span id="rotc"></span><br>
     {{/if}}
+
     {{#if radio_value "20"}}
-    {{> recentsamples}}
+      Last 20 samples:<br>
+      {{#each recentsamples}}
+        {{this}}<br>
+      {{/each}}
     {{/if}}
+
     {{#if radio_value "json"}}
-    {{samples_json}}
+      {{samples_json}}
     {{/if}}
 </template>

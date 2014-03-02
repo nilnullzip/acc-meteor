@@ -29,7 +29,7 @@ if (Meteor.isClient) {
     return Samples.find().count();
   };
 
-  Template.recentsamples.samples = function () {
+  Template.radios.recentsamples = function () {
     var s = Samples.findOne({}, {sort: {created_at: -1}});
     if (s != null) {
       return _.map(s["samples"], JSON.stringify );
