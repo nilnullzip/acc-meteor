@@ -29,7 +29,7 @@ if (Meteor.isClient) {
     var samples = Samples.find({}, {sort: {created_at: 1}});
     var l = [];
     samples.forEach(function (s) {
-      l = l + s.samples;
+      l = l.concat(s.samples);
     });
     return JSON.stringify(l);
   };
