@@ -1,14 +1,25 @@
 // Collect accelerometer samples and save to MongoDB collection named "samples".
 
-Samples = new Meteor.Collection("samples");
+Samples = new Meteor.Collection("samples"); // Get/create MongoDB collection
 
 testdata = {samples: [1,2,3]}
 
 if (Meteor.isClient) {
 
-  Template.radios.radio_value = function(input){
-    return Session.get("radio_value") == input;
+  // Live display of number of samples
+
+  Template.nsamples.nsamples = function () {
+    return Samples.find().count();
   };
+
+  Template.nsamples.events({
+    'click input#clear': function () {
+      console.log("Clearing all samples")
+      Samples.find().forEach(function(d){Samples.remove(d._id)});
+    }
+  });
+
+  // JSON display
 
   Template.radios.samples_json = function(input){
     var samples = Samples.find({}, {sort: {created_at: 1}});
@@ -19,15 +30,7 @@ if (Meteor.isClient) {
     return JSON.stringify(l);
   };
 
-  Template.radios.events({
-    'click input': function () {
-      Session.set("radio_value", $("input:radio[name=display]:checked").val())
-    }
-  });
-
-  Template.nsamples.nsamples = function () {
-    return Samples.find().count();
-  };
+  // Recent samples display
 
   Template.radios.recentsamples = function () {
     var s = Samples.findOne({}, {sort: {created_at: -1}});
@@ -36,52 +39,66 @@ if (Meteor.isClient) {
     } else {
       return [];
     }
-   };
+  };
 
-  Template.buttons.events({
-    'click input#clear': function () {
-      console.log("Clearing all samples")
-      Samples.find().forEach(function(d){Samples.remove(d._id)});
+  // Manage radio buttons
+
+  Template.radios.radio_value = function(input){
+    return Session.get("radio_value") == input;
+  };
+
+  Template.radios.events({
+    'click input': function () {
+      Session.set("radio_value", $("input:radio[name=display]:checked").val())
     }
   });
 
-  Meteor.startup(function () {
-    Session.set("radio_value", $("input:radio[name=display]:checked").val())
+  // At startup set up device motion event handler.
 
+  Meteor.startup(function () {
+
+    Session.set("radio_value", $("input:radio[name=display]:checked").val())
     var timestamp = 0;
-    var docs = [];
+    var samples = [];
 
     if (window.DeviceMotionEvent != undefined) {
             
       window.ondevicemotion = function(e) {
+
+        // Measure sample interval and siplay on page
+
         var t = Date.now();
         $("#measured").html(t - timestamp);
         $("#interval").html(e.interval);
         timestamp = t
 
-        var doc = {}
-        doc.x = e.accelerationIncludingGravity.x;
-        doc.y = e.accelerationIncludingGravity.y;
-        doc.z = e.accelerationIncludingGravity.z;
-        $("#accx").html(doc.x);
-        $("#accy").html(doc.y);
-        $("#accz").html(doc.z);
+        // Create the sample
+
+        var sample = {}
+        sample.x = e.accelerationIncludingGravity.x;
+        sample.y = e.accelerationIncludingGravity.y;
+        sample.z = e.accelerationIncludingGravity.z;
+        $("#accx").html(sample.x);
+        $("#accy").html(sample.y);
+        $("#accz").html(sample.z);
 
         if ( e.rotationRate ) {
-          doc.a = e.rotationRate.alpha;
-          doc.b = e.rotationRate.beta;
-          doc.c = e.rotationRate.gamma;
-          $("#rota").html(doc.a);
-          $("#rotb").html(doc.b);
-          $("#rotc").html(doc.c);
+          sample.a = e.rotationRate.alpha;
+          sample.b = e.rotationRate.beta;
+          sample.c = e.rotationRate.gamma;
+          $("#rota").html(sample.a);
+          $("#rotb").html(sample.b);
+          $("#rotc").html(sample.c);
         }
-        doc.t = t;
-        docs.push(doc);
+        sample.t = t;
 
-        if (docs.length > 20) {
+        // Every 20 samples save record in mongoDB.
+
+        samples.push(sample);
+        if (samples.length > 20) {
           created_at = new Date().getTime();
-          Samples.insert({samples: docs, created_at: created_at});
-          docs = [];
+          Samples.insert({samples: samples, created_at: created_at});
+          samples = [];
         }
       }
     }
@@ -90,6 +107,6 @@ if (Meteor.isClient) {
 
 if (Meteor.isServer) {
   Meteor.startup(function () {
-    // Stuff to run at startup goes here.
+    // Stuff to run at startup on server goes here.
   });
 }
