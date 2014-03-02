@@ -4,24 +4,12 @@
 
 <body>
   <div id="maindiv">
-    Collect accelerometer samples and save to MongoDB<br><br>
-    Sanity check: <span id="sanity"></span><br>
-    <br>
-    measured sample interval: <span id="measured"></span> ms<br>
-    API indicates sample interval: <span id="interval"></span> sec<br>
-    number of samples saved: <span id="interval">{{> nsamples}}</span><br>
-    <br>
+    <h3>Collect accelerometer samples and save to MongoDB</h3>
+    number of samples records saved: <span id="interval">{{> nsamples}}</span>
     {{> buttons}}
     <br>
     <br>
-    acc x: <span id="accx"></span><br>
-    acc y: <span id="accy"></span><br>
-    acc z: <span id="accz"></span><br>
-    rot a: <span id="rota"></span><br>
-    rot b: <span id="rotb"></span><br>
-    rot c: <span id="rotc"></span><br>
-    <br>
-    {{> recentsamples}}
+    {{> radios}}
   </div>
 </body>
 
@@ -39,6 +27,31 @@
 </template>
 
 <template name="buttons">
-    <input type="button" id="clear" value="Clear all samples" />
+    <input type="button" id="clear" value="Delete samples" />
 </template>
 
+<template name="radios">
+    <form action="">
+      <input type="radio" name="display" value="live" checked>Live accelerometer data<br>
+      <input type="radio" name="display" value="20">Last 20 samples<br>
+      <input type="radio" name="display" value="json">JSON
+    </form>
+    <br>
+    {{#if radio_value "live"}}
+    measured sample interval: <span id="measured"></span> ms<br>
+    API indicates sample interval: <span id="interval"></span> sec<br>
+    <br>
+    acc x: <span id="accx"></span><br>
+    acc y: <span id="accy"></span><br>
+    acc z: <span id="accz"></span><br>
+    rot a: <span id="rota"></span><br>
+    rot b: <span id="rotb"></span><br>
+    rot c: <span id="rotc"></span><br>
+    {{/if}}
+    {{#if radio_value "20"}}
+    {{> recentsamples}}
+    {{/if}}
+    {{#if radio_value "json"}}
+    {{samples_json}}
+    {{/if}}
+</template>

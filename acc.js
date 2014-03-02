@@ -5,19 +5,41 @@ Samples = new Meteor.Collection("samples");
 testdata = {samples: [1,2,3]}
 
 if (Meteor.isClient) {
-  /* Possibly helpful old code here for sessions
-  Template.player.selected = function () {
-    return Session.equals("selected_player", this._id) ? "selected" : '';
-  };
 
-  Template.player.events({
-    'click': function () {
-      Session.set("selected_player", this._id);
-      //Players.update(Session.get("selected_player"), {$inc: {score: 5}});
-      Players.update(this._id, {$inc: {score: 5}});
+  Handlebars.registerHelper('sessionvar',function(input){
+    console.log("sessionvar: " + input)
+    return Session.get(input);
+  });
+/*
+  Handlebars.registerHelper('radio_selected',function(input){
+    console.log("radio_selected: " + input)
+    if (document.getElementById(input)) {
+      return document.getElementById(input).checked;      
+    } else {
+      return false;
     }
   });
-  */
+*/
+  Template.radios.radio_value = function(input){
+//    console.log("radio_selected: " + JSON.stringify(input))
+    return Session.get("radio_value") == input;
+  };
+
+  Template.radios.samples_json = function(input){
+    var samples = Samples.find({}, {sort: {created_at: 1}});
+    var l = [];
+    samples.forEach(function (s) {
+      l = l + s.samples;
+    });
+    return JSON.stringify(l);
+  };
+
+  Template.radios.events({
+    'click input': function () {
+//      console.log("radio clicked")
+      Session.set("radio_value", $("input:radio[name=display]:checked").val())
+    }
+  });
 
   Template.nsamples.nsamples = function () {
     return Samples.find().count();
@@ -40,11 +62,10 @@ if (Meteor.isClient) {
   });
 
   Meteor.startup(function () {
+    Session.set("radio_value", $("input:radio[name=display]:checked").val())
 
     var timestamp = 0;
     var docs = [];
-
-    document.getElementById("sanity").innerHTML = "JS working..."
 
     if (window.DeviceMotionEvent != undefined) {
             
@@ -75,9 +96,8 @@ if (Meteor.isClient) {
         }
         doc.t = t;
         docs.push(doc);
-        document.getElementById("sanity").innerHTML = "docs.length: " + docs.length;      
+
         if (docs.length > 20) {
-          document.getElementById("sanity").innerHTML = "inserted!"
           created_at = new Date().getTime();
           Samples.insert({samples: docs, created_at: created_at});
           docs = [];
