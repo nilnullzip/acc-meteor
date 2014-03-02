@@ -16,9 +16,9 @@ Based on HTML5 accelerometer interface and Meteor web framework.
     cd acc-meteor
     meteor
 
-At this point the app will be running on the dev machine and can be accessed at: http://localhost:3000/. Your dev machine will likely not support the accelerometer, so it won't capture any samples. However, it will have a view of the database.
+At this point the app will be running on the dev machine and can be accessed at: http://localhost:3000/. Your machine will likely not support the accelerometer, so it won't capture any samples. However, it will be able to view the database.
 
-Now open the app on your mobile phone accessing the dev machine. Obviously will need to substitute your dev machine's IP address for "localhost" in the URL. You should see a lively display of changing sample data on the mobile. The page opened on the server will show the data live as it is saved in the database.
+Now open the app page on your mobile phone. (Obviously will need to substitute your dev machine's IP address in the URL.) You should see a lively display of changing data/info. The page opened on the server will show the data changing live as it is saved in the database.
 
 ### Access the database
 
